@@ -2,12 +2,14 @@ name: Debricked scan
 
 on: [push]
 
+env: 
+  DEBRICKED_TOKEN: ${{secrets.DEBRICKED_TOKEN}}
+
 jobs:
   vulnerabilities-scan:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - uses: debricked/actions@v3
-        env:
-          DEBRICKED_TOKEN: ${{ secrets.DEBRICKED_TOKEN }}
+      - run: curl -L https://github.com/debricked/cli/releases/latest/download/cli_linux_x86_64.tar.gz | tar -xz debricked
+      - run: ./debricked scan . --access-token DEBRICKED_TOKEN
